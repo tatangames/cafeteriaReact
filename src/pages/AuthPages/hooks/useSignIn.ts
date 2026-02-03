@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import {loginApi} from "../../../services/api.ts";
+import { useNavigate } from "react-router"; // Importa useNavigate
 
 export enum AuthStatus {
     INVALID_EMAIL = "EMAIL_NOT_FOUND",
@@ -26,8 +27,9 @@ interface LoginResponse {
 }
 
 export function useSignIn() {
-    const [showPassword, setShowPassword] = useState(false);
 
+    const navigate = useNavigate(); // Hook de navegación
+    const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState("");
     const [password, setPassword] = useState("");
@@ -87,6 +89,8 @@ export function useSignIn() {
                 );
 
                 toast.success("Bienvenido 👋");
+
+                navigate("/dashboard", { replace: true });
             } else {
                 // Manejar respuesta no exitosa
                 if (data.status === AuthStatus.INVALID_EMAIL) {
