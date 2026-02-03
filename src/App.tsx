@@ -1,5 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
+
 import SignIn from "./pages/AuthPages/SignIn";
+
+
 import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
 import UserProfiles from "./pages/UserProfiles";
@@ -17,7 +20,7 @@ import FormElements from "./pages/Forms/FormElements";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
-import Home from "./pages/Dashboard/Home";
+//import Home from "./pages/Dashboard/Home";
 
 export default function App() {
   return (
@@ -25,9 +28,19 @@ export default function App() {
       <Router>
         <ScrollToTop />
         <Routes>
+
+
+          {/* Auth Layout */}
+          <Route path="/" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+
+          {/* Fallback Route */}
+          <Route path="*" element={<NotFound />} />
+
+
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
-            <Route index path="/" element={<Home />} />
+
 
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />
@@ -53,12 +66,10 @@ export default function App() {
             <Route path="/bar-chart" element={<BarChart />} />
           </Route>
 
-          {/* Auth Layout */}
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
 
-          {/* Fallback Route */}
-          <Route path="*" element={<NotFound />} />
+
+
+
         </Routes>
       </Router>
     </>
