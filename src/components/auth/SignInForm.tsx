@@ -4,6 +4,7 @@ import { EyeCloseIcon, EyeIcon } from "../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Button from "../ui/button/Button";
+import { login } from "../../services/api";
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,6 +13,7 @@ export default function SignInForm() {
   const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // ✅ Validar email
   const validateEmail = (value: string): boolean => {
@@ -32,7 +34,7 @@ export default function SignInForm() {
   };
 
   // ✅ Submit login
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const isEmailValid = validateEmail(email);
@@ -47,8 +49,44 @@ export default function SignInForm() {
       return;
     }
 
-    // 🎯 PASÓ TODAS LAS REGLAS
-    console.log("LOGIN OK", { email, password });
+    // 🎯 Llamar a la API usando el servicio
+    setLoading(true);
+
+    try {
+      const { response, data } = await login(email, password);
+
+      console.log("Respuesta completa:", data);
+     // console.log("Status:", response.status);
+
+      if (response.ok) {
+        // ✅ Login exitoso
+        console.log("✅ LOGIN EXITOSO");
+        console.log("Token:", data.token);
+        console.log("Usuario:", data.user);
+
+        // Guardar token en localStorage
+        localStorage.setItem("token", data.token);
+
+        // Aquí puedes redirigir al dashboard
+        // navigate("/dashboard");
+      } else {
+        // ❌ Error de login
+        console.log("❌ ERROR DE LOGIN");
+        console.log("Mensaje:", data.message);
+
+        // Mostrar error según el mensaje
+        if (data.message.includes("correo")) {
+          setEmailError(data.message);
+        } else if (data.message.includes("contraseña")) {
+          setPasswordError(data.message);
+        }
+      }
+    } catch (error) {
+      console.error("❌ ERROR DE CONEXIÓN:", error);
+      setPasswordError("Error al conectar con el servidor");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // ✅ Forgot password click
@@ -145,8 +183,12 @@ export default function SignInForm() {
             </div>
 
             {/* Button */}
-            <Button type="submit" className="w-full">
-              Iniciar sesión
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loading}
+            >
+              {loading ? "Iniciando sesión..." : "Iniciar sesión"}
             </Button>
 
           </div>
