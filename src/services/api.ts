@@ -1,45 +1,46 @@
-const API_URL = "http://127.0.0.1:8000/api";
+import axios from "axios";
 
-export const login = async (email: string, password: string) => {
-  const response = await fetch(`${API_URL}/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-    },
-    body: JSON.stringify({
-      email,
-      password,
-      device_name: "Web Application",
-    }),
+const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
+
+// Crear instancia de axios
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  },
+});
+
+// Funciones API
+export const loginApi = async (email: string, password: string) => {
+  const { data } = await api.post("/login", {
+    email,
+    password,
+    device_name: "Web Application",
   });
-
-  const data = await response.json();
-  return { response, data };
+  return data;
 };
 
 export const logout = async (token: string) => {
-  const response = await fetch(`${API_URL}/logout`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Accept": "application/json",
-    },
-  });
-
-  const data = await response.json();
-  return { response, data };
+  const { data } = await api.post(
+      "/logout",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+  );
+  return data;
 };
 
 export const getMe = async (token: string) => {
-  const response = await fetch(`${API_URL}/me`, {
-    method: "GET",
+  const { data } = await api.get("/me", {
     headers: {
-      "Authorization": `Bearer ${token}`,
-      "Accept": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
-
-  const data = await response.json();
-  return { response, data };
+  return data;
 };
+
+export default api;

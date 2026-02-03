@@ -1,6 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 
 import SignIn from "./pages/AuthPages/SignIn";
+import { Toaster } from "react-hot-toast";
+
+
+
+
+
 
 
 import SignUp from "./pages/AuthPages/SignUp";
@@ -25,6 +31,17 @@ import { ScrollToTop } from "./components/common/ScrollToTop";
 export default function App() {
   return (
     <>
+      <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              fontSize: '16px',
+              padding: '16px',
+              minWidth: '250px',
+              maxWidth: '500px',
+            },
+          }}
+      />
       <Router>
         <ScrollToTop />
         <Routes>
