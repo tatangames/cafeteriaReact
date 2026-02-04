@@ -1,15 +1,15 @@
-import { Navigate } from "react-router";
+// components/ProtectedRoute.jsx
+import { Navigate, Outlet } from "react-router-dom";
+import { getAuth } from "../utils/auth";
 
-interface ProtectedRouteProps {
-    children: React.ReactNode;
-}
+export default function ProtectedRoute() {
+    const auth = getAuth();
 
-export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-    const auth = localStorage.getItem("auth");
-
+    // Si NO está autenticado, redirigir al login
     if (!auth) {
         return <Navigate to="/" replace />;
     }
 
-    return <>{children}</>;
+    // Si está autenticado, renderizar las rutas hijas
+    return <Outlet />;
 }

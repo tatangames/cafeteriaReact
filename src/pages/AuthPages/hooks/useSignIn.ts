@@ -2,7 +2,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import {loginApi} from "../../../services/api.ts";
-import { useNavigate } from "react-router"; // Importa useNavigate
+import { useNavigate } from "react-router";
+import { setAuth } from "../../../utils/auth.ts"; // Importa useNavigate
 
 export enum AuthStatus {
     INVALID_EMAIL = "EMAIL_NOT_FOUND",
@@ -74,19 +75,7 @@ export function useSignIn() {
             const data = await loginApi(email, password);
 
             if (data.success && data.token) {
-
-                localStorage.setItem(
-                    "auth",
-                    JSON.stringify({
-                        token: data.token,
-                        tokenType: data.token_type, // "Bearer"
-                        user: {
-                            id: data.user.id,
-                            nombre: data.user.nombre,
-                            email: data.user.email
-                        }
-                    })
-                );
+                setAuth(data.token, data.token_type, data.user);
 
                 toast.success("Bienvenido 👋");
 
