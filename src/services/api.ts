@@ -11,7 +11,8 @@ const api = axios.create({
   },
 });
 
-// Funciones API
+
+// INICIO DE SESION
 export const loginApi = async (email: string, password: string) => {
   const { data } = await api.post("/login", {
     email,
@@ -21,6 +22,8 @@ export const loginApi = async (email: string, password: string) => {
   return data;
 };
 
+
+// CERRAR SESION
 export const logout = async (token: string) => {
   const { data } = await api.post(
       "/logout",
@@ -33,6 +36,60 @@ export const logout = async (token: string) => {
   );
   return data;
 };
+
+// SOLICITAR RESET CONTRASEÑA
+export const sendResetPasswordEmail = async (email: string) => {
+  const { data } = await api.post("/admin/enviar/correo/password", {
+    email,
+  });
+
+  return data;
+};
+
+
+// VALIDAR TOKEN DE RESET
+export const validateResetToken = async (
+    token: string,
+    email: string
+) => {
+    const { data } = await api.post(
+        "/validate-reset-token",
+        {
+            token,
+            email,
+        }
+    );
+
+    return data;
+};
+
+// CONFIRMAR / ACTUALIZAR CONTRASEÑA
+export const confirmResetPassword = async (
+    token: string,
+    email: string,
+    password: string,
+    passwordConfirmation: string
+) => {
+    const { data } = await api.post(
+        "/reset-password-confirm",
+        {
+            token,
+            email,
+            password,
+            password_confirmation: passwordConfirmation,
+        }
+    );
+
+    return data;
+};
+
+
+
+
+
+
+
+
 
 export const getMe = async (token: string) => {
   const { data } = await api.get("/me", {

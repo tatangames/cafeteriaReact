@@ -30,6 +30,7 @@ import LineChart from "./pages/Charts/LineChart";
 import BarChart from "./pages/Charts/BarChart";
 import NotFound from "./pages/OtherPage/NotFound";
 import PublicRoute from "./components/auth/PublicRoute.tsx";
+import ResetPasswordConfirm from "./pages/AuthPages/ResetPasswordConfirm.tsx";
 
 export default function App() {
     return (
@@ -44,7 +45,7 @@ export default function App() {
                   <Route element={<PublicRoute />}>
                       <Route path="/" element={<SignIn />} />
                       <Route path="/reset-password" element={<ResetPassword/>} />
-
+                      <Route path="/admin/reset-password" element={<ResetPasswordConfirm/>} />
 
                   </Route>
 
