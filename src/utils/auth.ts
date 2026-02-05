@@ -1,9 +1,11 @@
-// utils/auth.js
+// utils/auth.ts
 
 export interface User {
   id: number;
   nombre: string;
   email: string;
+  roles: string[];        // 👈 Agregar roles
+  permissions: string[];  // 👈 Agregar permissions
 }
 
 export interface AuthData {
@@ -18,26 +20,32 @@ export const getAuth = (): AuthData | null => {
 };
 
 export const setAuth = (
-  token: string,
-  tokenType: string,
-  user: User
+    token: string,
+    tokenType: string,
+    user: User
 ): void => {
   localStorage.setItem(
-    "auth",
-    JSON.stringify({
-      token,
-      tokenType,
-      user: {
-        id: user.id,
-        nombre: user.nombre,
-        email: user.email
-      }
-    })
+      "auth",
+      JSON.stringify({
+        token,
+        tokenType,
+        user: {
+          id: user.id,
+          nombre: user.nombre,
+          email: user.email,
+          roles: user.roles,           // 👈 Guardar roles
+          permissions: user.permissions // 👈 Guardar permissions
+        }
+      })
   );
+
+  // También guardar el token por separado (para mantener compatibilidad)
+  localStorage.setItem("token", token);
 };
 
 export const clearAuth = (): void => {
   localStorage.removeItem("auth");
+  localStorage.removeItem("token"); // 👈 Limpiar también el token
 };
 
 // Funciones auxiliares
@@ -49,4 +57,16 @@ export const getToken = (): string | null => {
 export const getUser = (): User | null => {
   const auth = getAuth();
   return auth?.user ?? null;
+};
+
+// 👇 Nueva función para obtener permisos
+export const getUserPermissions = (): string[] => {
+  const user = getUser();
+  return user?.permissions ?? [];
+};
+
+// 👇 Nueva función para obtener roles
+export const getUserRoles = (): string[] => {
+  const user = getUser();
+  return user?.roles ?? [];
 };

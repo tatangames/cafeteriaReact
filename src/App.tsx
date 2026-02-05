@@ -31,6 +31,7 @@ import BarChart from "./pages/Charts/BarChart";
 import NotFound from "./pages/OtherPage/NotFound";
 import PublicRoute from "./components/auth/PublicRoute.tsx";
 import ResetPasswordConfirm from "./pages/AuthPages/ResetPasswordConfirm.tsx";
+import {PermissionRoute} from "./components/auth/PermissionRoute.tsx";
 
 export default function App() {
     return (
@@ -54,7 +55,21 @@ export default function App() {
                       <Route element={<AppLayout />}>
                           <Route path="/dashboard" element={<Dashboard />} />
                           <Route path="/profile" element={<UserProfiles />} />
-                          <Route path="/calendar" element={<Calendar />} />
+
+
+                          {/* Calendar con permiso específico */}
+                          <Route
+                              path="/calendar"
+                              element={
+                                  <PermissionRoute permission="calendar.view">
+                                      <Calendar />
+                                  </PermissionRoute>
+                              }
+                          />
+
+
+
+
                           <Route path="/blank" element={<Blank />} />
                           <Route path="/form-elements" element={<FormElements />} />
                           <Route path="/basic-tables" element={<BasicTables />} />

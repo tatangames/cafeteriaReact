@@ -1,5 +1,6 @@
 import PageMeta from "../../components/common/PageMeta";
 import ResetPasswordForm from "../../components/auth/ResetPasswordForm";
+import {Link} from "react-router";
 
 const ResetPassword = () => {
   return (
@@ -31,6 +32,17 @@ const ResetPassword = () => {
           </div>
 
           <ResetPasswordForm />
+
+            {/* Volver a inicio */}
+            <div className="mt-6 text-center">
+                <Link
+                    to="/"
+                    className="text-sm text-[#6F491A] hover:text-[#5a3a15] font-medium transition-colors"
+                >
+                    ← Volver a inicio
+                </Link>
+            </div>
+
         </div>
       </div>
     </>

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-import {loginApi} from "../../../services/api.ts";
+import { getMe, loginApi } from "../../../services/api.ts";
 import { useNavigate } from "react-router";
-import { setAuth } from "../../../utils/auth.ts"; // Importa useNavigate
+import { useAuth } from "../../../context/AuthContext.tsx";
+import { setAuth } from "../../../utils/auth.ts";
 
 export enum AuthStatus {
     INVALID_EMAIL = "EMAIL_NOT_FOUND",
@@ -28,15 +29,15 @@ interface LoginResponse {
 }
 
 export function useSignIn() {
+    const navigate = useNavigate();
+    const { setUser } = useAuth(); // 👈 Mover aquí, al nivel del custom hook
 
-    const navigate = useNavigate(); // Hook de navegación
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState("");
     const [password, setPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [loading, setLoading] = useState(false);
-
 
     // validacion del correo
     const validateEmail = (value: string): boolean => {
@@ -75,9 +76,16 @@ export function useSignIn() {
             const data = await loginApi(email, password);
 
             if (data.success && data.token) {
-                setAuth(data.token, data.token_type, data.user);
+                // 1. Obtener datos completos del usuario con roles y permisos
+                const userData = await getMe(data.token);
 
-                toast.success("Bienvenido 👋");
+                // 2. Guardar en localStorage usando tu función setAuth
+                setAuth(data.token, data.token_type, userData);
+
+                // 3. Guardar usuario en el contexto
+                setUser(userData);
+
+                toast.success(`Bienvenido ${userData.nombre} 👋`);
 
                 navigate("/dashboard", { replace: true });
             } else {
@@ -91,7 +99,6 @@ export function useSignIn() {
             }
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                // El servidor respondió con un error
                 const data = error.response.data as LoginResponse;
 
                 if (data.status === AuthStatus.INVALID_EMAIL) {
@@ -101,7 +108,6 @@ export function useSignIn() {
                 }
                 toast.error(data.message);
             } else {
-                // Error de red o el servidor no respondió
                 setPasswordError("Error al conectar con el servidor");
                 toast.error("Error de conexión");
             }

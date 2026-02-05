@@ -86,11 +86,6 @@ export const confirmResetPassword = async (
 
 
 
-
-
-
-
-
 export const getMe = async (token: string) => {
   const { data } = await api.get("/me", {
     headers: {
