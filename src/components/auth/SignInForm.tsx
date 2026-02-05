@@ -48,6 +48,7 @@ export function SignInForm() {
                     validateEmail(e.target.value);
                   }}
                   className={emailError ? "border-red-500" : ""}
+                  maxLength={100}
               />
               {emailError && <p className="text-sm text-red-500">{emailError}</p>}
             </div>

@@ -5,6 +5,7 @@ import Input from "../form/input/InputField";
 import Button from "../ui/button/Button";
 import LoadingOverlay from "../ui/loading/LoadingOverlay";
 import {confirmResetPassword} from "../../services/api.ts";
+import toast from "react-hot-toast";
 
 interface ResetPasswordConfirmFormProps {
     token: string;
@@ -37,10 +38,13 @@ const ResetPasswordConfirmForm = ({ token, email, onSuccess }: ResetPasswordConf
         setError("");
 
         try {
-            await confirmResetPassword(token, email, password, confirmPassword);
+            const data = await confirmResetPassword(token, email, password, confirmPassword);
+
+            toast.success(data.message);
+
             onSuccess();
-        } catch (err: any) {
-            const message = err?.response?.data?.message || "Error al restablecer la contraseña";
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'Error desconocido';
             setError(message);
         } finally {
             setLoading(false);
@@ -62,6 +66,7 @@ const ResetPasswordConfirmForm = ({ token, email, onSuccess }: ResetPasswordConf
                         type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        maxLength={50}
                     />
                     <span
                         onClick={() => setShowPassword(!showPassword)}
@@ -82,6 +87,7 @@ const ResetPasswordConfirmForm = ({ token, email, onSuccess }: ResetPasswordConf
                         type={showConfirmPassword ? "text" : "password"}
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
+                        maxLength={50}
                     />
                     <span
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
