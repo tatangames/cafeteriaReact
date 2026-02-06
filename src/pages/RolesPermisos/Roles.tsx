@@ -5,7 +5,10 @@ import { getRolesTable, borrarRolGlobal } from "../../services/api";
 import { getToken } from "../../utils/auth";
 
 import LoadingModal from "../../components/Loading/LoadingModal";
-import DeleteRoleModal from "../../components/modal/Deleterolemodal.tsx";
+import ConfirmDeleteModal from "../../components/modal/ConfirmDeleteModal.tsx";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 
 interface Role {
   id: number;
@@ -21,6 +24,9 @@ export default function Roles() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const navigate = useNavigate();
+
 
   const customStyles = {
     table: {
@@ -96,8 +102,11 @@ export default function Roles() {
   };
 
   const handleEdit = (row: Role) => {
-    console.log("Editar rol", row);
-    // Aquí puedes agregar la lógica para editar
+    navigate(`/admin/roles/${row.id}/permisos`, {
+      state: {
+        roleName: row.name,
+      },
+    });
   };
 
   const handleDeleteClick = (row: Role) => {
@@ -122,10 +131,9 @@ export default function Roles() {
       setIsDeleteModalOpen(false);
       setSelectedRole(null);
 
-      // Opcional: mostrar mensaje de éxito
-      console.log("Rol eliminado exitosamente");
+      toast.success("Rol eliminado exitosamente");
     } catch (error) {
-      console.error("Error eliminando rol", error);
+      toast.error("Error al borrar");
       // Aquí puedes mostrar un mensaje de error al usuario
     } finally {
       setIsDeleting(false);
@@ -214,15 +222,18 @@ export default function Roles() {
 
   return (
       <>
-        <LoadingModal isOpen={loading} />
+        <LoadingModal isOpen={loading} text="Cargando roles..." />
 
-        <DeleteRoleModal
+        <ConfirmDeleteModal
             isOpen={isDeleteModalOpen}
-            onClose={handleCloseModal}
+            onClose={() => !isDeleting && setIsDeleteModalOpen(false)}
             onConfirm={handleConfirmDelete}
-            roleName={selectedRole?.name || ""}
+            title="Eliminar ROL"
+            description={`Se eliminará el rol:`}
+            itemName={selectedRole?.name || ""}
             isDeleting={isDeleting}
         />
+
 
         <div className="p-6">
           {/* HEADER */}

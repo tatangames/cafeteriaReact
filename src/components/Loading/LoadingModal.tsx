@@ -3,9 +3,10 @@ import { createPortal } from "react-dom";
 
 interface LoadingModalProps {
     isOpen: boolean;
+    text?: string;
 }
 
-export default function LoadingModal({ isOpen }: LoadingModalProps) {
+export default function LoadingModal({ isOpen, text = "Cargando..." }: LoadingModalProps) {
     if (!isOpen) return null;
 
     return createPortal(
@@ -18,7 +19,7 @@ export default function LoadingModal({ isOpen }: LoadingModalProps) {
                 </div>
 
                 {/* Texto */}
-                <p className="text-sm font-medium text-gray-700">Cargando...</p>
+                <p className="text-sm font-medium text-gray-700">{text}</p>
             </div>
         </div>,
         document.body

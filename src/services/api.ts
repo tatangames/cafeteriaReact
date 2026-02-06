@@ -141,6 +141,28 @@ export const getRolePermissionsTable = async (
     return data;
 };
 
+export const borrarPermisoRol = async (
+    token: string,
+    idrol: number,
+    idpermiso: number
+) => {
+    const { data } = await api.post(
+        "/admin/roles/permiso/borrar",
+        {
+            idrol,
+            idpermiso,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    return data;
+};
+
+
 
 
 export default api;

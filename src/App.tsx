@@ -34,6 +34,7 @@ import ResetPasswordConfirm from "./pages/AuthPages/ResetPasswordConfirm.tsx";
 import {PermissionRoute} from "./components/auth/PermissionRoute.tsx";
 import Roles from "./pages/RolesPermisos/Roles.tsx";
 import Permisos from "./pages/RolesPermisos/Permisos.tsx";
+import RolesPermisos from "./pages/RolesPermisos/RolesPermisos.tsx";
 
 export default function App() {
     return (
@@ -79,6 +80,12 @@ export default function App() {
                                 </PermissionRoute>
                             }
                           />
+
+                          <Route
+                              path="/admin/roles/:id/permisos"
+                              element={<RolesPermisos />}
+                          />
+
 
                           <Route
                             path="/permisos"
