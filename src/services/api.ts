@@ -109,7 +109,37 @@ export const getRolesTable = async (token: string) => {
 };
 
 
+export const borrarRolGlobal = async (token: string, idrol: number) => {
+    const { data } = await api.post(
+        "/admin/roles/borrar-global",
+        { idrol },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
 
+    return data;
+};
+
+
+
+export const getRolePermissionsTable = async (
+    token: string,
+    idrol: number
+) => {
+    const { data } = await api.get(
+        `/admin/roles/permisos/tabla/${idrol}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    return data;
+};
 
 
 
