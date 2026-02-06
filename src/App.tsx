@@ -32,6 +32,8 @@ import NotFound from "./pages/OtherPage/NotFound";
 import PublicRoute from "./components/auth/PublicRoute.tsx";
 import ResetPasswordConfirm from "./pages/AuthPages/ResetPasswordConfirm.tsx";
 import {PermissionRoute} from "./components/auth/PermissionRoute.tsx";
+import Roles from "./pages/RolesPermisos/Roles.tsx";
+import Permisos from "./pages/RolesPermisos/Permisos.tsx";
 
 export default function App() {
     return (
@@ -61,10 +63,30 @@ export default function App() {
                           <Route
                               path="/calendar"
                               element={
-                                  <PermissionRoute permission="calendar.view">
+                                  <PermissionRoute permission="admin.sidebar.roles.y.permisos">
                                       <Calendar />
                                   </PermissionRoute>
                               }
+                          />
+
+
+                          {/* 👇 NUEVAS RUTAS */}
+                          <Route
+                            path="/roles"
+                            element={
+                                <PermissionRoute >
+                                    <Roles />
+                                </PermissionRoute>
+                            }
+                          />
+
+                          <Route
+                            path="/permisos"
+                            element={
+                                <PermissionRoute >
+                                    <Permisos />
+                                </PermissionRoute>
+                            }
                           />
 
 

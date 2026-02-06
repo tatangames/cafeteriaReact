@@ -95,4 +95,22 @@ export const getMe = async (token: string) => {
   return data;
 };
 
+
+
+// ROLES - SOLO LISTADO
+export const getRolesTable = async (token: string) => {
+  const { data } = await api.get("/admin/roles/tabla", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return data;
+};
+
+
+
+
+
+
 export default api;

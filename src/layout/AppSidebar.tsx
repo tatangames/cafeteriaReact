@@ -9,12 +9,12 @@ import {
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  ListIcon,
+  ListIcon, LockIcon,
   PageIcon,
   PieChartIcon,
   PlugInIcon,
   TableIcon,
-  UserCircleIcon,
+  UserCircleIcon
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
@@ -28,6 +28,26 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
+
+  {
+    name: "Roles y Permisos",
+    icon: <LockIcon />, // O el ícono que prefieras
+
+    subItems: [
+      {
+        name: "Roles",
+        path: "/roles",
+        pro: false
+      },
+      {
+        name: "Permisos",
+        path: "/permisos",
+        pro: false
+      }
+    ],
+  },
+
+
   {
     icon: <GridIcon />,
     name: "Dashboard",
@@ -37,7 +57,7 @@ const navItems: NavItem[] = [
     icon: <CalenderIcon />,
     name: "Calendar",
     path: "/calendar",
-    permission: "calendar.view", // 👈 Definir el permiso requerido
+    permission: "admin.sidebar.roles.y.permisos2", // 👈 Definir el permiso requerido
   },
   {
     icon: <UserCircleIcon />,
