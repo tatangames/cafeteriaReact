@@ -35,6 +35,7 @@ import {PermissionRoute} from "./components/auth/PermissionRoute.tsx";
 import Roles from "./pages/RolesPermisos/Roles.tsx";
 import Permisos from "./pages/RolesPermisos/Permisos.tsx";
 import RolesPermisos from "./pages/RolesPermisos/RolesPermisos.tsx";
+import PermisosTodos from "./pages/RolesPermisos/PermisosTodos.tsx";
 
 export default function App() {
     return (
@@ -42,21 +43,21 @@ export default function App() {
         <Toaster
           position="top-right"
           containerStyle={{
-            zIndex: 99999, // Mayor que z-[9999] del header
+            zIndex: 99999999, // Mayor que z-[9999] del header
           }}
           toastOptions={{
             duration: 3000,
             style: {
-              zIndex: 99999,
+              zIndex: 99999999,
             },
             success: {
               style: {
-                zIndex: 99999,
+                zIndex: 99999999,
               },
             },
             error: {
               style: {
-                zIndex: 99999,
+                zIndex: 99999999,
               },
             },
           }}
@@ -108,15 +109,14 @@ export default function App() {
                           />
 
 
-                          <Route
-                            path="/permisos"
-                            element={
-                                <PermissionRoute >
-                                    <Permisos />
-                                </PermissionRoute>
-                            }
-                          />
-
+                        <Route
+                          path="/admin/permisos-todos"
+                          element={
+                            <PermissionRoute>
+                              <PermisosTodos />
+                            </PermissionRoute>
+                          }
+                        />
 
 
 

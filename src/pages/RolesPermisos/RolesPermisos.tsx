@@ -6,11 +6,13 @@ import toast from "react-hot-toast";
 import {
     getRolePermissionsTable,
     borrarPermisoRol,
+    agregarPermisoRol,
 } from "../../services/api";
 import { getToken } from "../../utils/auth";
 
 import LoadingModal from "../../components/Loading/LoadingModal";
 import ConfirmDeleteModal from "../../components/modal/ConfirmDeleteModal";
+import AgregarPermisoModal from "../../components/modal/AgregarPermisoModal";
 
 interface Permiso {
     id: number;
@@ -22,14 +24,20 @@ export default function RolesPermisos() {
     const location = useLocation();
     const roleName = location.state?.roleName ?? "";
 
+    const roleId = Number(id);
+
     const [data, setData] = useState<Permiso[]>([]);
     const [loading, setLoading] = useState(true);
     const [filterText, setFilterText] = useState("");
 
-    // modal delete
+    // eliminar
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedPermiso, setSelectedPermiso] = useState<Permiso | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    // agregar
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
         fetchPermisos();
@@ -37,26 +45,51 @@ export default function RolesPermisos() {
 
     const fetchPermisos = async () => {
         try {
+            setLoading(true);
             const token = getToken();
             if (!token) throw new Error("Token no encontrado");
 
-            const response = await getRolePermissionsTable(token, Number(id));
+            const response = await getRolePermissionsTable(token, roleId);
             setData(response.permisos);
         } catch (error) {
-            console.error("Error cargando permisos", error);
+            console.error(error);
             toast.error("Error cargando permisos");
         } finally {
             setLoading(false);
         }
     };
 
-    // abrir modal
+    // ✅ AGREGAR PERMISO
+    const handleConfirmAdd = async (permisoId: number) => {
+        setIsAdding(true);
+        try {
+            const token = getToken();
+            if (!token) throw new Error("Token no encontrado");
+
+            await agregarPermisoRol(token, roleId, permisoId);
+
+            toast.success("Permiso agregado correctamente");
+
+            await fetchPermisos(); // refresca tabla
+            setIsAddModalOpen(false); // 🔥 cierra modal
+        } catch (error: any) {
+            console.error(error);
+            if (error.response?.status === 409) {
+                toast.error("El rol ya tiene este permiso");
+            } else {
+                toast.error("No se pudo agregar el permiso");
+            }
+        } finally {
+            setIsAdding(false);
+        }
+    };
+
+    // eliminar
     const handleDelete = (permiso: Permiso) => {
         setSelectedPermiso(permiso);
         setIsDeleteModalOpen(true);
     };
 
-    // confirmar eliminación
     const handleConfirmDelete = async () => {
         if (!selectedPermiso) return;
 
@@ -65,12 +98,9 @@ export default function RolesPermisos() {
             const token = getToken();
             if (!token) throw new Error("Token no encontrado");
 
-            await borrarPermisoRol(token, Number(id), selectedPermiso.id);
+            await borrarPermisoRol(token, roleId, selectedPermiso.id);
 
-            setData((prev) =>
-              prev.filter((p) => p.id !== selectedPermiso.id)
-            );
-
+            setData((prev) => prev.filter((p) => p.id !== selectedPermiso.id));
             toast.success("Permiso eliminado correctamente");
 
             setIsDeleteModalOpen(false);
@@ -83,59 +113,9 @@ export default function RolesPermisos() {
         }
     };
 
-    const handleCloseModal = () => {
-        if (!isDeleting) {
-            setIsDeleteModalOpen(false);
-            setSelectedPermiso(null);
-        }
-    };
-
-    const customStyles = {
-        table: {
-            style: {
-                borderRadius: "12px",
-                overflow: "visible",
-            },
-        },
-        headRow: {
-            style: {
-                backgroundColor: "#FFFFFF",
-                borderBottom: "1px solid #E5E7EB",
-                minHeight: "48px",
-            },
-        },
-        headCells: {
-            style: {
-                fontSize: "12px",
-                fontWeight: "700",
-                color: "#1F2937",
-                textTransform: "uppercase",
-                letterSpacing: "0.04em",
-            },
-        },
-        rows: {
-            style: {
-                fontSize: "14px",
-                color: "#374151",
-                minHeight: "52px",
-                borderBottom: "1px solid #F1F5F9",
-            },
-            stripedStyle: {
-                backgroundColor: "#E3F0FF",
-            },
-            highlightOnHoverStyle: {
-                backgroundColor: "#356FA3",
-                color: "#FFFFFF",
-                cursor: "pointer",
-            },
-        },
-        pagination: {
-            style: {
-                borderTop: "1px solid #E5E7EB",
-                minHeight: "56px",
-            },
-        },
-    };
+    const filteredData = data.filter((item) =>
+      item.name.toLowerCase().includes(filterText.toLowerCase())
+    );
 
     const columns = [
         {
@@ -165,50 +145,13 @@ export default function RolesPermisos() {
         },
     ];
 
-    const TableSpinner = () => (
-      <div className="flex justify-center py-10">
-          <div className="animate-spin">
-              <svg
-                width="48"
-                height="48"
-                viewBox="0 0 48 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                  <circle
-                    cx="24"
-                    cy="24"
-                    r="20"
-                    stroke="#E5E7EB"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <circle
-                    cx="24"
-                    cy="24"
-                    r="20"
-                    stroke="#3B82F6"
-                    strokeWidth="4"
-                    fill="none"
-                    strokeDasharray="94.2 31.4"
-                    strokeLinecap="round"
-                  />
-              </svg>
-          </div>
-      </div>
-    );
-
-    const filteredData = data.filter((item) =>
-      item.name.toLowerCase().includes(filterText.toLowerCase())
-    );
-
     return (
       <>
           <LoadingModal isOpen={loading} text="Cargando permisos..." />
 
           <ConfirmDeleteModal
             isOpen={isDeleteModalOpen}
-            onClose={handleCloseModal}
+            onClose={() => !isDeleting && setIsDeleteModalOpen(false)}
             onConfirm={handleConfirmDelete}
             title="Quitar Permiso"
             description="Se eliminará el permiso"
@@ -216,24 +159,40 @@ export default function RolesPermisos() {
             isDeleting={isDeleting}
           />
 
+          <AgregarPermisoModal
+            isOpen={isAddModalOpen}
+            onClose={() => !isAdding && setIsAddModalOpen(false)}
+            onConfirm={handleConfirmAdd}
+            isAdding={isAdding}
+            permisosAsignados={data.map((p) => p.id)} // 🔥 evita duplicados
+          />
+
           <div className="p-6">
-              <div className="mb-6">
-                  <h1 className="text-2xl font-semibold text-gray-800">
-                      Permisos del Rol
-                  </h1>
-                  <p className="text-sm text-gray-500">
-                      Rol: <strong>{roleName}</strong>
-                  </p>
+              <div className="mb-6 flex justify-between items-center">
+                  <div>
+                      <h1 className="text-2xl font-semibold text-gray-800">
+                          Permisos del Rol
+                      </h1>
+                      <p className="text-sm text-gray-500">
+                          Rol: <strong>{roleName}</strong> • {filteredData.length} permisos
+                      </p>
+                  </div>
+
+                  <button
+                    onClick={() => setIsAddModalOpen(true)}
+                    className="px-4 py-2.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition"
+                  >
+                      + Agregar Permiso
+                  </button>
               </div>
 
-              {/* BUSCADOR */}
               <div className="flex justify-end mb-4">
                   <input
                     type="text"
                     placeholder="Buscar..."
                     value={filterText}
                     onChange={(e) => setFilterText(e.target.value)}
-                    className="h-[42px] w-[300px] rounded-lg border border-gray-300 bg-transparent px-4 text-sm focus:border-blue-400 focus:outline-none"
+                    className="h-[42px] w-[300px] rounded-lg border border-gray-300 px-4 text-sm"
                   />
               </div>
 
@@ -241,14 +200,10 @@ export default function RolesPermisos() {
                   <DataTable
                     columns={columns}
                     data={filteredData}
-                    progressPending={loading}
-                    progressComponent={<TableSpinner />}
                     pagination
-                    paginationPerPage={10}
                     striped
                     highlightOnHover
                     responsive
-                    customStyles={customStyles}
                     noDataComponent={
                         <div className="py-6 text-sm text-gray-500">
                             No hay registros para mostrar

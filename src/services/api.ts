@@ -108,7 +108,7 @@ export const getRolesTable = async (token: string) => {
   return data;
 };
 
-
+// BORRAR UN ROL COMPLETO
 export const borrarRolGlobal = async (token: string, idrol: number) => {
     const { data } = await api.post(
         "/admin/roles/borrar-global",
@@ -124,7 +124,7 @@ export const borrarRolGlobal = async (token: string, idrol: number) => {
 };
 
 
-
+// OBTENER TODOS LOS ROLES
 export const getRolePermissionsTable = async (
     token: string,
     idrol: number
@@ -141,6 +141,7 @@ export const getRolePermissionsTable = async (
     return data;
 };
 
+// BORRAR UN PERMISO DEL ROL
 export const borrarPermisoRol = async (
     token: string,
     idrol: number,
@@ -161,6 +162,95 @@ export const borrarPermisoRol = async (
 
     return data;
 };
+
+// CREAR UN ROL
+export const crearNuevoRol = async (
+  token: string,
+  nombre: string
+) => {
+  const { data } = await api.post(
+    `/admin/roles/nuevo-rol`,
+    { nombre },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return data;
+};
+
+
+// AGREGAR UN PERMISO AL ROL
+export const agregarPermisoRol = async (
+  token: string,
+  idrol: number,
+  idpermiso: number
+) => {
+  const { data } = await api.post(
+    "/admin/roles/permiso/agregar",
+    {
+      idrol,
+      idpermiso,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  return data;
+};
+
+// LISTADO DE PERMISOS
+export const getPermisosTable = async (token: string) => {
+  const { data } = await api.get(
+    `/admin/roles/permisos-todos/tabla`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  return data;
+};
+
+
+// BORRAR UN PERMISO GLOBAL
+export const borrarPermisoGlobal = async (token: string, idpermiso: number) => {
+  const { data } = await api.post(
+    "/admin/permisos/extra-borrar",
+    { idpermiso },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return data;
+};
+
+// CREAR UN NUEVO PERMISO
+export const crearNuevoPermiso = async (token: string, nombre: string) => {
+  const { data } = await api.post(
+    "/admin/permisos/extra-nuevo",
+    { nombre },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return data;
+};
+
 
 
 
