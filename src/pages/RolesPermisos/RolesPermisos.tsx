@@ -68,10 +68,11 @@ export default function RolesPermisos() {
             await borrarPermisoRol(token, Number(id), selectedPermiso.id);
 
             setData((prev) =>
-                prev.filter((p) => p.id !== selectedPermiso.id)
+              prev.filter((p) => p.id !== selectedPermiso.id)
             );
 
-            toast.success("Permiso eliminado");
+            toast.success("Permiso eliminado correctamente");
+
             setIsDeleteModalOpen(false);
             setSelectedPermiso(null);
         } catch (error) {
@@ -152,110 +153,110 @@ export default function RolesPermisos() {
             name: "Opciones",
             width: "160px",
             cell: (row: Permiso) => (
-                <div className="flex justify-center">
-                    <button
-                        onClick={() => handleDelete(row)}
-                        className="px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition"
-                    >
-                        Eliminar
-                    </button>
-                </div>
+              <div className="flex justify-center">
+                  <button
+                    onClick={() => handleDelete(row)}
+                    className="px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition"
+                  >
+                      Eliminar
+                  </button>
+              </div>
             ),
         },
     ];
 
     const TableSpinner = () => (
-        <div className="flex justify-center py-10">
-            <div className="animate-spin">
-                <svg
-                    width="48"
-                    height="48"
-                    viewBox="0 0 48 48"
+      <div className="flex justify-center py-10">
+          <div className="animate-spin">
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 48 48"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                  <circle
+                    cx="24"
+                    cy="24"
+                    r="20"
+                    stroke="#E5E7EB"
+                    strokeWidth="4"
                     fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <circle
-                        cx="24"
-                        cy="24"
-                        r="20"
-                        stroke="#E5E7EB"
-                        strokeWidth="4"
-                        fill="none"
-                    />
-                    <circle
-                        cx="24"
-                        cy="24"
-                        r="20"
-                        stroke="#3B82F6"
-                        strokeWidth="4"
-                        fill="none"
-                        strokeDasharray="94.2 31.4"
-                        strokeLinecap="round"
-                    />
-                </svg>
-            </div>
-        </div>
+                  />
+                  <circle
+                    cx="24"
+                    cy="24"
+                    r="20"
+                    stroke="#3B82F6"
+                    strokeWidth="4"
+                    fill="none"
+                    strokeDasharray="94.2 31.4"
+                    strokeLinecap="round"
+                  />
+              </svg>
+          </div>
+      </div>
     );
 
     const filteredData = data.filter((item) =>
-        item.name.toLowerCase().includes(filterText.toLowerCase())
+      item.name.toLowerCase().includes(filterText.toLowerCase())
     );
 
     return (
-        <>
-            <LoadingModal isOpen={loading} text="Cargando permisos..." />
+      <>
+          <LoadingModal isOpen={loading} text="Cargando permisos..." />
 
-            <ConfirmDeleteModal
-                isOpen={isDeleteModalOpen}
-                onClose={handleCloseModal}
-                onConfirm={handleConfirmDelete}
-                title="Quitar Permiso"
-                description="Se eliminará el permiso"
-                itemName={selectedPermiso?.name || ""}
-                isDeleting={isDeleting}
-            />
+          <ConfirmDeleteModal
+            isOpen={isDeleteModalOpen}
+            onClose={handleCloseModal}
+            onConfirm={handleConfirmDelete}
+            title="Quitar Permiso"
+            description="Se eliminará el permiso"
+            itemName={selectedPermiso?.name || ""}
+            isDeleting={isDeleting}
+          />
 
-            <div className="p-6">
-                <div className="mb-6">
-                    <h1 className="text-2xl font-semibold text-gray-800">
-                        Permisos del Rol
-                    </h1>
-                    <p className="text-sm text-gray-500">
-                        Rol: <strong>{roleName}</strong>
-                    </p>
-                </div>
+          <div className="p-6">
+              <div className="mb-6">
+                  <h1 className="text-2xl font-semibold text-gray-800">
+                      Permisos del Rol
+                  </h1>
+                  <p className="text-sm text-gray-500">
+                      Rol: <strong>{roleName}</strong>
+                  </p>
+              </div>
 
-                {/* BUSCADOR */}
-                <div className="flex justify-end mb-4">
-                    <input
-                        type="text"
-                        placeholder="Buscar..."
-                        value={filterText}
-                        onChange={(e) => setFilterText(e.target.value)}
-                        className="h-[42px] w-[300px] rounded-lg border border-gray-300 bg-transparent px-4 text-sm focus:border-blue-400 focus:outline-none"
-                    />
-                </div>
+              {/* BUSCADOR */}
+              <div className="flex justify-end mb-4">
+                  <input
+                    type="text"
+                    placeholder="Buscar..."
+                    value={filterText}
+                    onChange={(e) => setFilterText(e.target.value)}
+                    className="h-[42px] w-[300px] rounded-lg border border-gray-300 bg-transparent px-4 text-sm focus:border-blue-400 focus:outline-none"
+                  />
+              </div>
 
-                <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-                    <DataTable
-                        columns={columns}
-                        data={filteredData}
-                        progressPending={loading}
-                        progressComponent={<TableSpinner />}
-                        pagination
-                        paginationPerPage={10}
-                        striped
-                        highlightOnHover
-                        responsive
-                        customStyles={customStyles}
-                        noDataComponent={
-                            <div className="py-6 text-sm text-gray-500">
-                                No hay registros para mostrar
-                            </div>
-                        }
-                    />
-                </div>
-            </div>
-        </>
+              <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+                  <DataTable
+                    columns={columns}
+                    data={filteredData}
+                    progressPending={loading}
+                    progressComponent={<TableSpinner />}
+                    pagination
+                    paginationPerPage={10}
+                    striped
+                    highlightOnHover
+                    responsive
+                    customStyles={customStyles}
+                    noDataComponent={
+                        <div className="py-6 text-sm text-gray-500">
+                            No hay registros para mostrar
+                        </div>
+                    }
+                  />
+              </div>
+          </div>
+      </>
     );
 }

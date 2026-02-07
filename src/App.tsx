@@ -39,7 +39,28 @@ import RolesPermisos from "./pages/RolesPermisos/RolesPermisos.tsx";
 export default function App() {
     return (
       <>
-          <Toaster position="top-right" />
+        <Toaster
+          position="top-right"
+          containerStyle={{
+            zIndex: 99999, // Mayor que z-[9999] del header
+          }}
+          toastOptions={{
+            duration: 3000,
+            style: {
+              zIndex: 99999,
+            },
+            success: {
+              style: {
+                zIndex: 99999,
+              },
+            },
+            error: {
+              style: {
+                zIndex: 99999,
+              },
+            },
+          }}
+        />
 
           <Router>
               <ScrollToTop />
