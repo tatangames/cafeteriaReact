@@ -9,7 +9,7 @@ import {
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  ListIcon, LockIcon,
+  ListIcon, CustomIcon,
   PageIcon,
   PieChartIcon,
   PlugInIcon,
@@ -31,8 +31,10 @@ const navItems: NavItem[] = [
 
   {
     name: "Roles y Permisos",
-    icon: <LockIcon />, // O el ícono que prefieras
-
+    icon:  <CustomIcon
+      src="/images/sidebar/config-user.svg"
+      alt="Roles y Permisos"
+    />,
     subItems: [
       {
         name: "Roles",
@@ -329,39 +331,42 @@ const AppSidebar: React.FC = () => {
           onMouseEnter={() => !isExpanded && setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
       >
-        <div
-            className={`py-8 flex ${
-                !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
-            }`}
-        >
-          <Link to="/">
-            {isExpanded || isHovered || isMobileOpen ? (
-                <>
-                  <img
-                      className="dark:hidden"
-                      src="/images/logo/logo.svg"
-                      alt="Logo"
-                      width={150}
-                      height={40}
-                  />
-                  <img
-                      className="hidden dark:block"
-                      src="/images/logo/logo-dark.svg"
-                      alt="Logo"
-                      width={150}
-                      height={40}
-                  />
-                </>
+
+
+        <div className="-mx-5">
+          <Link to="/" className="flex flex-col items-center">
+
+            {(isExpanded || isHovered || isMobileOpen) ? (
+              /* LOGO GRANDE (MENU ABIERTO) */
+              <img
+                src="/images/logo/logoe.jpg"
+                alt="Logo"
+                className="w-full h-24 object-cover"
+              />
             ) : (
-                <img
-                    src="/images/logo/logo-icon.svg"
-                    alt="Logo"
-                    width={32}
-                    height={32}
-                />
+              /* LOGO COMPACTO (MENU CERRADO) */
+              <img
+                src="/images/logo/logoeci.png"
+                alt="Logo compacto"
+                className="w-14 h-14 object-contain mt-4"
+              />
+            )}
+
+            {(isExpanded || isHovered || isMobileOpen) && (
+              <span className="mt-3 text-sm font-medium text-gray-900 dark:text-white text-center">
+      </span>
             )}
           </Link>
         </div>
+
+
+
+
+
+
+
+
+
         <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
           <nav className="mb-6">
             <div className="flex flex-col gap-4">

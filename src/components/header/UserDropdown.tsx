@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { logout } from "../../services/api";
 import { clearAuth, getAuth } from "../../utils/auth.ts";
+import { useAuth } from "../../context/AuthContext";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +12,9 @@ export default function UserDropdown() {
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
   const closeDropdown = () => setIsOpen(false);
+
+  const { user } = useAuth();
+
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -41,11 +44,11 @@ export default function UserDropdown() {
           className="flex items-center text-gray-700 dark:text-gray-400"
         >
           <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-            <img src="/images/user/owner.jpg" alt="User" />
+            <img src="/images/logo/logoeci.png" alt="User" />
           </span>
 
           <span className="block mr-1 font-medium text-theme-sm">
-            Musharof
+            {user?.nombre || "Usuario"}
           </span>
 
           <svg
@@ -74,50 +77,22 @@ export default function UserDropdown() {
         >
           <div>
             <span className="block font-medium text-gray-700 dark:text-gray-400">
-              Musharof Chowdhury
+              {user?.nombre || "Usuario"}
             </span>
-            <span className="block text-theme-xs text-gray-500 dark:text-gray-400">
-              randomuser@pimjo.com
+                      <span className="block text-theme-xs text-gray-500 dark:text-gray-400">
+              {user?.email || "correo@ejemplo.com"}
             </span>
           </div>
 
-          <ul className="pt-4 pb-3 mt-3 border-b border-gray-200 dark:border-gray-800 space-y-1">
-            <li>
-              <DropdownItem
-                onItemClick={closeDropdown}
-                to="/profile"
-                className="dropdown-item"
-              >
-                Edit profile
-              </DropdownItem>
-            </li>
-            <li>
-              <DropdownItem
-                onItemClick={closeDropdown}
-                to="/profile"
-                className="dropdown-item"
-              >
-                Account settings
-              </DropdownItem>
-            </li>
-            <li>
-              <DropdownItem
-                onItemClick={closeDropdown}
-                to="/support"
-                className="dropdown-item"
-              >
-                Support
-              </DropdownItem>
-            </li>
-          </ul>
 
           <button
             onClick={handleLogout}
             disabled={isLoggingOut}
             className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 disabled:opacity-50"
           >
-            {isLoggingOut ? "Cerrando sesión..." : "Sign out"}
+            {isLoggingOut ? "Cerrando sesión..." : "Cerrar sesión"}
           </button>
+
         </Dropdown>
       </div>
 
