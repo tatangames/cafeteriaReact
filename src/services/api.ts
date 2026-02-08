@@ -252,6 +252,125 @@ export const crearNuevoPermiso = async (token: string, nombre: string) => {
 };
 
 
+export const getUsuariosTable = async (token: string) => {
+  const { data } = await api.get(
+    `/admin/usuarios/tabla`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  return data;
+};
+
+
+
+export const crearUsuario = async (
+  token: string,
+  datos: {
+    nombre: string;
+    email: string;
+    password: string;
+    rol: string;
+  }
+) => {
+  const { data } = await api.post(
+    "/admin/permisos/nuevo-usuario",
+    datos,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return data;
+};
+
+
+export interface InformacionAdministradorResponse {
+  success: number;
+  info: {
+    id: number;
+    nombre: string;
+    email: string;
+    estado: boolean;
+  };
+  roles: {
+    [key: string]: string;
+  };
+  rol_actual: string;
+}
+
+
+export const informacionAdministrador = async (
+  token: string,
+  id: number
+): Promise<InformacionAdministradorResponse> => {
+  try {
+    const { data } = await api.post(
+      "/admin/informacion/administrador",
+      { id },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // Validación del backend
+    if (data.success !== 1) {
+      throw new Error("No se pudo obtener la información del administrador");
+    }
+
+    return data;
+  } catch (error: any) {
+    console.error("Error informacionAdministrador:", error);
+    throw error.response?.data?.message || "Error al obtener la información";
+  }
+};
+
+
+
+export const actualizarAdministrador = async (
+  token: string,
+  id: number,
+  datos: {
+    nombre: string;
+    email: string;
+    password?: string;
+    rol: string;
+    estado: boolean;
+  }
+) => {
+  try {
+    const { data } = await api.put(
+      `/admin/actualizar/administrador/${id}`,
+      datos,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (data.success !== 1) {
+      throw new Error(data.message || "Error al actualizar");
+    }
+
+    return data;
+  } catch (error: any) {
+    if (error.response?.status === 422) {
+      throw error.response.data.errors; // para mostrar en inputs
+    }
+    throw error.response?.data?.message || "Error del servidor";
+  }
+};
+
+
 
 
 

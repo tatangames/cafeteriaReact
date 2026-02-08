@@ -91,15 +91,12 @@ export default function PermisosTodos() {
         toast.success("Permiso creado correctamente");
         setIsAddOpen(false);
         fetchPermisos();
-
       } else if (res.success === 2) {
         toast.error(`El permiso "${res.permiso}" ya existe`);
       } else {
         toast.error("Error al crear permiso");
       }
-
     } catch (error: any) {
-      // por si viene directo como error HTTP 409
       const permiso = error?.response?.data?.permiso;
       if (permiso) {
         toast.error(`El permiso "${permiso}" ya existe`);
@@ -169,37 +166,38 @@ export default function PermisosTodos() {
       <div className="p-6">
         {/* HEADER */}
         <div className="mb-6 flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-800">
-              Permisos
-            </h1>
-            <p className="text-sm text-gray-500">
-              {filteredData.length} permisos en total
-            </p>
+          {/* IZQUIERDA: TEXTO + BOTÓN */}
+          <div className="flex items-center gap-4">
+            <div>
+              <h1 className="text-2xl font-semibold text-gray-800">
+                Permisos
+              </h1>
+              <p className="text-sm text-gray-500">
+                {filteredData.length} permisos en total
+              </p>
+            </div>
+
+            <button
+              onClick={() => setIsAddOpen(true)}
+              className="px-4 py-2.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition"
+            >
+              + Agregar Permiso
+            </button>
           </div>
 
-          <button
-            onClick={() => setIsAddOpen(true)}
-            className="px-4 py-2.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition"
-          >
-            + Agregar Permiso
-          </button>
-        </div>
-
-        {/* BUSCADOR */}
-        <div className="flex justify-end mb-4">
+          {/* DERECHA: BUSCADOR */}
           <input
             type="text"
             placeholder="Buscar permiso..."
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
             className="
-              h-[42px] w-[300px]
-              rounded-lg border border-gray-300
-              px-4 text-sm
-              focus:outline-none
-              focus:ring-2 focus:ring-blue-500/20
-            "
+      h-[42px] w-[300px]
+      rounded-lg border border-gray-300
+      px-4 text-sm
+      focus:outline-none
+      focus:ring-2 focus:ring-blue-500/20
+    "
           />
         </div>
 

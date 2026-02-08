@@ -36,6 +36,7 @@ import Roles from "./pages/RolesPermisos/Roles.tsx";
 import Permisos from "./pages/RolesPermisos/Permisos.tsx";
 import RolesPermisos from "./pages/RolesPermisos/RolesPermisos.tsx";
 import PermisosTodos from "./pages/RolesPermisos/PermisosTodos.tsx";
+import Usuarios from "./pages/RolesPermisos/Usuarios.tsx";
 
 export default function App() {
     return (
@@ -93,30 +94,41 @@ export default function App() {
                           />
 
 
-                          {/* 👇 NUEVAS RUTAS */}
+                          {/* ROLES */}
                           <Route
-                            path="/roles"
+                            path="/admin/roles"
                             element={
                                 <PermissionRoute >
                                     <Roles />
                                 </PermissionRoute>
                             }
                           />
-
+                         {/* ROLES -> PERMISOS */}
                           <Route
                               path="/admin/roles/:id/permisos"
                               element={<RolesPermisos />}
                           />
+                          {/* LISTADO DE PERMISOS */}
+                          <Route
+                            path="/admin/permisos-todos"
+                            element={
+                              <PermissionRoute>
+                                <PermisosTodos />
+                              </PermissionRoute>
+                            }
+                          />
 
 
+                          {/* LISTADO DE USUARIOS */}
                         <Route
-                          path="/admin/permisos-todos"
+                          path="/admin/usuarios"
                           element={
                             <PermissionRoute>
-                              <PermisosTodos />
+                              <Usuarios />
                             </PermissionRoute>
                           }
                         />
+
 
 
 

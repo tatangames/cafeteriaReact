@@ -36,12 +36,12 @@ const navItems: NavItem[] = [
     subItems: [
       {
         name: "Roles",
-        path: "/roles",
+        path: "/admin/roles",
         pro: false
       },
       {
-        name: "Permisos",
-        path: "/permisos",
+        name: "Usuarios",
+        path: "/admin/usuarios",
         pro: false
       }
     ],
