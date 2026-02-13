@@ -251,7 +251,7 @@ export const crearNuevoPermiso = async (token: string, nombre: string) => {
   return data;
 };
 
-
+// OBTENER USUARIOS
 export const getUsuariosTable = async (token: string) => {
   const { data } = await api.get(
     `/admin/usuarios/tabla`,
@@ -267,7 +267,7 @@ export const getUsuariosTable = async (token: string) => {
 };
 
 
-
+// CREAR UN USUARIO - ROLES
 export const crearUsuario = async (
   token: string,
   datos: {
@@ -305,7 +305,7 @@ export interface InformacionAdministradorResponse {
   rol_actual: string;
 }
 
-
+// INFORMACION DE ADMINISTRADOR
 export const informacionAdministrador = async (
   token: string,
   id: number
@@ -334,7 +334,7 @@ export const informacionAdministrador = async (
 };
 
 
-
+// ACTUALIZAR ADMINISTRADOR
 export const actualizarAdministrador = async (
   token: string,
   id: number,
@@ -369,6 +369,129 @@ export const actualizarAdministrador = async (
     throw error.response?.data?.message || "Error del servidor";
   }
 };
+
+
+// LISTADO DE CATEGORIAS
+export const getCategoriasTable = async (token: string) => {
+  const { data } = await api.get(
+    `/admin/categorias/tabla`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  return data;
+};
+
+// CREAR CATEGORIA
+export const crearCategoria = async (
+  token: string,
+  payload: { nombre: string }
+) => {
+  const { data } = await api.post(
+    `/admin/categorias/nuevo`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  return data;
+};
+
+// ACTUALIZAR CATEGORIA
+export const actualizarCategoria = async (
+  token: string,
+  id: number,
+  payload: {
+    nombre: string;
+    estado: boolean;
+  }
+) => {
+  const { data } = await api.put(
+    `/admin/categorias/actualizar/${id}`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  return data;
+};
+
+
+
+
+
+
+// LISTADO DE UNIDAD DE MEDIDA
+export const getUnidadMedidaTable = async (token: string) => {
+  const { data } = await api.get(
+    `/admin/unidadmedida/tabla`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  return data;
+};
+
+// CREAR CATEGORIA
+export const crearUnidadMedida = async (
+  token: string,
+  payload: { nombre: string }
+) => {
+  const { data } = await api.post(
+    `/admin/unidadmedida/nuevo`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  return data;
+};
+
+// ACTUALIZAR CATEGORIA
+export const actualizarUnidadMedida = async (
+  token: string,
+  id: number,
+  payload: {
+    nombre: string;
+    estado: boolean;
+  }
+) => {
+  const { data } = await api.put(
+    `/admin/unidadmedida/actualizar/${id}`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  return data;
+};
+
+
+
 
 
 

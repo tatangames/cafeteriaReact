@@ -37,6 +37,7 @@ import Permisos from "./pages/RolesPermisos/Permisos.tsx";
 import RolesPermisos from "./pages/RolesPermisos/RolesPermisos.tsx";
 import PermisosTodos from "./pages/RolesPermisos/PermisosTodos.tsx";
 import Usuarios from "./pages/RolesPermisos/Usuarios.tsx";
+import CategoriasConfig from "./pages/Productos/Config/CategoriasConfig.tsx";
 
 export default function App() {
     return (
@@ -128,6 +129,17 @@ export default function App() {
                             </PermissionRoute>
                           }
                         />
+
+                        { /*CONFIGURACION PRODUCTOS */}
+                        <Route
+                          path="/admin/productos/config"
+                          element={
+                            <PermissionRoute>
+                              <CategoriasConfig />
+                            </PermissionRoute>
+                          }
+                        />
+
 
 
 

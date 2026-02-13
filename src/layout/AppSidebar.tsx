@@ -24,7 +24,7 @@ type NavItem = {
   icon: React.ReactNode;
   path?: string;
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
-  permission?: string; // 👈 Agregar campo de permiso opcional
+  permission?: string;
 };
 
 const navItems: NavItem[] = [
@@ -46,6 +46,22 @@ const navItems: NavItem[] = [
         path: "/admin/usuarios",
         pro: false
       }
+    ],
+  },
+
+
+  {
+    name: "Inventarios",
+    icon:  <CustomIcon
+      src="/images/sidebar/productos.svg"
+      alt="Inventarios"
+    />,
+    subItems: [
+      {
+        name: "Configuración",
+        path: "/admin/productos/config",
+        pro: false
+      },
     ],
   },
 
