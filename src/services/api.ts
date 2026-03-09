@@ -448,7 +448,7 @@ export const getUnidadMedidaTable = async (token: string) => {
   return data;
 };
 
-// CREAR CATEGORIA
+// CREAR UNIDAD DE MEDIDA
 export const crearUnidadMedida = async (
   token: string,
   payload: { nombre: string }
@@ -467,7 +467,7 @@ export const crearUnidadMedida = async (
   return data;
 };
 
-// ACTUALIZAR CATEGORIA
+// ACTUALIZAR UNIDAD DE MEDIDA
 export const actualizarUnidadMedida = async (
   token: string,
   id: number,

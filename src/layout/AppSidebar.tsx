@@ -50,16 +50,41 @@ const navItems: NavItem[] = [
   },
 
 
+
   {
-    name: "Inventarios",
+    name: "Inventario",
     icon:  <CustomIcon
-      src="/images/sidebar/productos.svg"
-      alt="Inventarios"
+        src="/images/sidebar/productos.svg"
+        alt="Inventario"
     />,
     subItems: [
       {
-        name: "Configuración",
-        path: "/admin/productos/config",
+        name: "Categorias",
+        path: "/admin/categorias/index",
+        pro: false
+      },
+
+    ],
+  },
+
+
+
+
+  {
+    name: "Configuración",
+    icon:  <CustomIcon
+      src="/images/sidebar/productos.svg"
+      alt="Configuración"
+    />,
+    subItems: [
+      {
+        name: "Categorias",
+        path: "/admin/categorias/index",
+        pro: false
+      },
+      {
+        name: "Unidad de Medida",
+        path: "/admin/unidadmedida/index",
         pro: false
       },
     ],

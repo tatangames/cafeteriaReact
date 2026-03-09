@@ -33,11 +33,12 @@ import PublicRoute from "./components/auth/PublicRoute.tsx";
 import ResetPasswordConfirm from "./pages/AuthPages/ResetPasswordConfirm.tsx";
 import {PermissionRoute} from "./components/auth/PermissionRoute.tsx";
 import Roles from "./pages/RolesPermisos/Roles.tsx";
-import Permisos from "./pages/RolesPermisos/Permisos.tsx";
 import RolesPermisos from "./pages/RolesPermisos/RolesPermisos.tsx";
 import PermisosTodos from "./pages/RolesPermisos/PermisosTodos.tsx";
 import Usuarios from "./pages/RolesPermisos/Usuarios.tsx";
 import CategoriasConfig from "./pages/Productos/Config/CategoriasConfig.tsx";
+import UnidadMedidaConfig from "./pages/Productos/Config/UnidadMedidaConfig.tsx";
+
 
 export default function App() {
     return (
@@ -130,9 +131,9 @@ export default function App() {
                           }
                         />
 
-                        { /*CONFIGURACION PRODUCTOS */}
+                        { /* CATEGORIAS */}
                         <Route
-                          path="/admin/productos/config"
+                          path="/admin/categorias/index"
                           element={
                             <PermissionRoute>
                               <CategoriasConfig />
@@ -140,7 +141,15 @@ export default function App() {
                           }
                         />
 
-
+                          { /* UNIDAD DE MEDIDA */}
+                          <Route
+                              path="/admin/unidadmedida/index"
+                              element={
+                                  <PermissionRoute>
+                                      <UnidadMedidaConfig />
+                                  </PermissionRoute>
+                              }
+                          />
 
 
 
